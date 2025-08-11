@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/layouts/_mainLayout.html">
+<head>
+    
+    <title layout:fragment="title" >Listado de Grupos</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <div th:if="${msg != null }">
+            <scrip>
+                swal({
+                    title: "Confirmacion",
+                    text: "[[ ${msg} ]]",
+                    icon: "success"
+                })
+            </scrip>
+        </div>
+        <div th:if="${error != null }">
+            <scrip>
+                swal({
+                    title: "Error",
+                    text: "[[ ${error} ]]",
+                    icon: "error"
+                })
+            </scrip>
+        </div>
+        
+            <h2>Listado de Grupos</h2>
+
+            <div class="mb-3">
+                <a th:href="@{/grupos/crear}" class="btn btn-success">Nuevo Grupo</a>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripcion</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="grupo : ${grupos.content}">
+                        <td th:text="${grupo.id}">1</td>
+                        <td th:text="${grupo.nombre}">Nombre</td>
+                        <td th:text="${grupo.descripcion}">Descripcion</td>
+                        <td>
+                            <a th:href="@{/grupos/view/{id}(id=${grupo.id})}" class="btn btn-info btn-sm">Ver</a>
+                            <a th:href="@{/grupos/edit/{id}(id=${grupo.id})}" class="btn btn-waring btn-sm">Editar</a>
+                            <a th:href="@{/grupos/delete/{id}(id=${grupo.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${grupos.totalElements == 0}">
+                        <td colspan="4" class="text-center" >No hay grupos registrados.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <nav th;if="${pageNumbers}">
+                <ul class="pagination justify-content-center">
+                    <li th:each="pageNum : ${pageNumbers}" class="page-item"
+                        th:classappend="${pageNum == grupo.number = 1 } ? 'active'">
+                        <a  class="page-link" th:href="@{/grupos/(page=${pageNum}, size=${grupos.size})}" th:text="${pageNumber}"></a>
+                    </li>
+                </ul>
+            </nav>
+    </section>
+</body>
+</html>
