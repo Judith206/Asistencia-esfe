@@ -10,28 +10,28 @@
 <body>
     <section layout:fragment="content">
         <div th:if="${msg != null }">
-            <scrip>
+            <script>
                 swal({
                     title: "Confirmacion",
                     text: "[[ ${msg} ]]",
                     icon: "success"
                 })
-            </scrip>
+            </script>
         </div>
         <div th:if="${error != null }">
-            <scrip>
+            <script>
                 swal({
                     title: "Error",
                     text: "[[ ${error} ]]",
                     icon: "error"
                 })
-            </scrip>
+            </script>
         </div>
         
             <h2>Listado de Grupos</h2>
 
             <div class="mb-3">
-                <a th:href="@{/grupos/crear}" class="btn btn-success">Nuevo Grupo</a>
+                <a th:href="@{/grupos/create}" class="btn btn-success">Nuevo Grupo</a>
             </div>
             <table class="table table-bordered">
                 <thead>
@@ -40,7 +40,7 @@
                         <th>Descripcion</th>
                         <th>Acciones</th>
                     </tr>
-                </thead>
+                </thead>                
                 <tbody>
                     <tr th:each="grupo : ${grupos.content}">
                         <td th:text="${grupo.id}">1</td>
@@ -48,7 +48,7 @@
                         <td th:text="${grupo.descripcion}">Descripcion</td>
                         <td>
                             <a th:href="@{/grupos/view/{id}(id=${grupo.id})}" class="btn btn-info btn-sm">Ver</a>
-                            <a th:href="@{/grupos/edit/{id}(id=${grupo.id})}" class="btn btn-waring btn-sm">Editar</a>
+                            <a th:href="@{/grupos/edit/{id}(id=${grupo.id})}" class="btn btn-warning btn-sm">Editar</a>
                             <a th:href="@{/grupos/delete/{id}(id=${grupo.id})}" class="btn btn-danger btn-sm">Eliminar</a>
                         </td>
                     </tr>
@@ -58,11 +58,11 @@
                 </tbody>
             </table>
 
-            <nav th;if="${pageNumbers}">
+            <nav th:if="${pageNumbers}">
                 <ul class="pagination justify-content-center">
                     <li th:each="pageNum : ${pageNumbers}" class="page-item"
-                        th:classappend="${pageNum == grupo.number = 1 } ? 'active'">
-                        <a  class="page-link" th:href="@{/grupos/(page=${pageNum}, size=${grupos.size})}" th:text="${pageNumber}"></a>
+                        th:classappend="${pageNum == grupos.number + 1 } ? 'active'">
+                        <a  class="page-link" th:href="@{/grupos(page=${pageNum}, size=${grupos.size})}"  th:text="${pageNum}"></a>
                     </li>
                 </ul>
             </nav>
