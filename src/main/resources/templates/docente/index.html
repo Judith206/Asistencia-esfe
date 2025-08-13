@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/layouts/_mainLayout.html">
+<head>
+    
+    <title layout:fragment="title" >Listado de Docente</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <div th:if="${msg != null }">
+            <script>
+                swal({
+                    title: "Confirmacion",
+                    text: "[[ ${msg} ]]",
+                    icon: "success"
+                })
+            </script>
+        </div>
+        <div th:if="${error != null }">
+            <script>
+                swal({
+                    title: "Error",
+                    text: "[[ ${error} ]]",
+                    icon: "error"
+                })
+            </script>
+        </div>
+        
+            <h2>Listado de Docentes</h2>
+
+            <div class="mb-3">
+                <a th:href="@{/docentes/create}" class="btn btn-success">Nuevo Grupo</a>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th>Escuela</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>                
+                <tbody>
+                    <tr th:each="docente : ${docentes.content}">
+                        
+                        <td th:text="${docente.nombre}">Nombre</td>
+                        <td th:text="${docente.apellido}">Apellido</td>
+                        <td th:text="${docente.email}">Email</td>
+                        <td th:text="${docente.telefono}">Telefono</td>
+                        <td th:text="${docente.escuela}">Escuela</td>
+                        <td>
+                            <a th:href="@{/docentes/view/{id}(id=${docente.id})}" class="btn btn-info btn-sm">Ver</a>
+                            <a th:href="@{/docentes/edit/{id}(id=${docente.id})}" class="btn btn-warning btn-sm">Editar</a>
+                            <a th:href="@{/docentes/delete/{id}(id=${docente.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${docentes.totalElements == 0}">
+                        <td colspan="5" class="text-center" >No hay docentes registrados.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <nav th:if="${pageNumbers}">
+                <ul class="pagination justify-content-center">
+                    <li th:each="pageNum : ${pageNumbers}" class="page-item"
+                        th:classappend="${pageNum == docentes.number + 1 } ? 'active'">
+                        <a  class="page-link" th:href="@{/docentes(page=${pageNum}, size=${docentes.size})}"  th:text="${pageNum}"></a>
+                    </li>
+                </ul>
+            </nav>
+    </section>
+</body>
+</html>
