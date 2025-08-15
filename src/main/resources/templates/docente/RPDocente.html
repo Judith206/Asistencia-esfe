@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {font-family: Arial, sans-serif;}
+        table {width: 100%; border-collapse: collapse; width: 100%;}
+        th, td {border: 1px solid black; padding: 6px;}
+        th {background-color: #f2f2f2;}
+    </style>
+</head>
+<body>
+    <h1>Lista de Docentes</h1>
+    <Table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="docente : ${docentes}">
+                <td th:text="${docente.nombre}"></td>
+                <td th:text="${docente.email}"></td>
+            </tr>
+        </tbody>
+    </Table>
+</body>
+</html>
