@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+<head>
+    <title layout:fragment="title" th:text="'Asignacion - '+ ${action}">Asignacion</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <h2 th:text="${action == 'create' ? 'Crear Asignacion' :
+                        action == 'edit' ? 'Editar Asignacion' :
+                        action == 'view' ? 'Ver Asignacion' : 
+                        action == 'delete' ? 'Eliminar Asignacion' : 'Asignacion'}"></h2>
+
+        <form th:action="@{${action == 'create' ? '/asignaciones/create' :
+                        action == 'edit' ? '/asignaciones/edit' :
+                        action == 'delete' ? '/asignaciones/delete' : '#'}}"
+              th:object="${docenteGrupo}" method="post">
+
+            <input type="hidden" th:if="${docenteGrupo.id != null}" th:field="*{id}" />
+            
+            <!-- Docente -->
+            <div class="mb-3">
+                <label for="docente" class="form-label">Docente</label>
+                <select th:field="*{docente}" id="docente" class="form-select"
+                        th:disabled="${action == 'view' or action == 'delete'}">
+                    <option value="">Seleccione Docente</option>
+                    <option th:each="d : ${docentes}" th:value="${d.id}" 
+                            th:text="${d.nombre + ' ' + d.apellido}"
+                            th:selected="${docenteGrupo.docente != null and docenteGrupo.docente.id == d.id}"></option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('docente')}" th:errors="*{docente}"></div>
+            </div>    
+            
+            <!-- Seleccion de grupo -->
+            <div class="mb-3">
+                <label for="grupo" class="form-label">Grupo</label>
+                <select th:field="*{grupo}" id="grupo" class="form-select"
+                        th:disabled="${action == 'view' or action == 'delete'}">
+                    <option value="">Seleccione un grupo</option>
+                    <option th:each="g : ${grupos}" th:value="${g.id}" th:text="${g.nombre}"
+                            th:selected="${docenteGrupo.grupo != null and docenteGrupo.grupo.id == g.id}"></option>
+                 </select>
+                 <div class="text-danger" th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></div>
+            </div>
+            
+            <!-- Año -->
+            <div class="mb-3">
+                <label for="anio" class="form-label">Año</label>
+                <input type="number" th:field="*{anio}" id="anio" class="form-control"
+                       th:attr="readonly=${action == 'view' or action == 'delete'}" />
+                <div class="text-danger" th:if="${#fields.hasErrors('anio')}" th:errors="*{anio}"></div>
+            </div>
+            
+            <!-- Ciclo -->
+            <div class="mb-3">
+                <label for="ciclo" class="form-label">Ciclo</label>
+                <input type="text" th:field="*{ciclo}" id="ciclo" class="form-control"
+                       th:attr="readonly=${action == 'view' or action == 'delete'}"/>
+                <div class="text-danger" th:if="${#fields.hasErrors('ciclo')}" th:errors="*{ciclo}"></div>
+            </div>
+            
+            <!-- Botones -->
+            <div th:if="${action != 'view'}" class="mb-3">
+                <button type="submit"
+                        th:text="${action == 'delete' ? 'Confirmar Eliminacion' : 'Guardar'}"
+                        class="btn"
+                        th:classappend="${action == 'delete' ? 'btn-danger' : 'btn-primary'}"></button>
+                <a th:href="@{/asignaciones}" class="btn btn-secondary">Cancelar</a>
+            </div>
+            
+            <div th:if="${action == 'view'}" class="mb-3">
+                <a th:href="@{/asignaciones}" class="btn btn-secondary">Regresar</a>
+            </div>
+        </form>
+    </section>
+</body>
+</html>

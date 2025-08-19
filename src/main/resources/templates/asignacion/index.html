@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
+<head>
+    <title layout:fragment="title">Listado de Asignaciones</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <!--Mensajes-->
+        <div th:if="${msg != null}">
+            <script>
+                swal({
+                    title:"Confirmación",
+                    text:'[[${msg}]]',
+                    icon:"success"
+                });
+            </script>
+        </div>
+        <div th:if="${error != null}">
+            <script>
+                swal({
+                    title:"Error",
+                    text:'[[${error}]]',
+                    icon:"error"
+                });
+            </script>
+        </div>
+        <h2>Listado de asignaciones</h2>
+
+        <!--Boton para nueva asignacion-->
+        <div class="mb-3">
+            <a th:href="@{/asignaciones/create}" class="btn btn-success">Nueva Asignación</a>
+        </div>
+
+        <!--Tabla de asignaciones-->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Docente</th>
+                    <th>Grupo</th>
+                    <th>Año</th>
+                    <th>Ciclo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="asg : ${asignaciones.content}">
+                    <td th:text="${asg.docente != null ? asg.docente.nombre + ' ' + asg.docente.apellido : '-'}">Docente</td>
+                    <td th:text="${asg.grupo != null ? asg.grupo.nombre : '-'}">Grupo</td>
+                    <td th:text="${asg.anio}">Año</td>
+                    <td th:text="${asg.ciclo}">Ciclo</td>
+                    <td>
+                        <a th:href="@{/asignaciones/view/{id}(id=${asg.id})}" class="btn btn-info btn-sm">Ver</a>
+                        <a th:href="@{/asignaciones/edit/{id}(id=${asg.id})}" class="btn btn-warning btn-sm">Editar</a>
+                        <a th:href="@{/asignaciones/delete/{id}(id=${asg.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                <tr th:if="${asignaciones.totalElements == 0}">
+                    <td colspan="5" class="text-center">No hay asignaciones registradas</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Paginación -->
+        <nav th:if="${pageNumbers != null and !pageNumbers.empty}">
+            <ul class="pagination justify-content-center">
+                <li th:each="pageNum : ${pageNumbers}" class="page-item"
+                    th:classappend="${pageNum == asignaciones.number + 1} ? 'active' : ''">
+                    <a th:href="@{/asignaciones(page=${pageNum}, size=${asignaciones.size})}" class="page-link"
+                       th:text="${pageNum}"></a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+</body>
+</html>
