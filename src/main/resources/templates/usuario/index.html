@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="en"
 xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~/layouts/_mainLayout.html">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/_mainLayout}">
 
 <div layout:fragment="content">
 <!--Mostrar mesaje  de confirmacion en caso de exito-->
@@ -21,14 +20,14 @@ xmlns:th="http://www.thymeleaf.org"
             Swal.fire({
                 title:"Error",
                 text:'[[${error}]]',
-                icon:"seccess"
+                icon:"error"
             });
         </script>
     </div>
     <h1>Listado de Usuario</h1>
-    <a href="@{/usuarios/create}" class="btn btn-outline-primary">Nuevo usuario</a>
-    <table>
-        <thead>
+    <a th:href="@{/usuarios/create}" class="btn btn-outline-primary">Nuevo usuario</a>
+    <table class="table table-striped">
+        <thead >
             <tr>
                 <th>ID</th>
                 <th>Login</th>
@@ -42,18 +41,18 @@ xmlns:th="http://www.thymeleaf.org"
                 <td th:text="${item.login}"></td>
                 <td th:text="${item.status == 1} ? 'ACTIVO' : 'INACTIVO'"></td>
                 <td>
-                    <a th:href="@{/usuarios/details/{id} (id = ${item.id})}" class="btn btn-outline-secondary">Detalles</a> |
-                    <a th:href="@{/usuarios/remove/{id} (id = ${item.id})}" class="btn btn-outline-danger">Eliminar</a>
+                    <a th:href="@{/usuarios/details/{id} (id = ${item.id})}" class="btn btn-secondary">Detalles</a> |
+                    <a th:href="@{/usuarios/remove/{id} (id = ${item.id})}" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item" th:each="pageNumber : ${pageNumbers}">
-                <a class="page-link" href="@{|/usuarios?page=${pageNumber}|}" th:text="${pageNumber}"></a>
+            <li class="page-item" th:each="pageNum : ${pageNumbers}">
+                <a class="page-link" th:href="@{|/usuarios?page=${pageNum}|}" th:text="${pageNum}"></a>
             </li>
         </ul>
     </nav>
 </div>
-</html>
+
