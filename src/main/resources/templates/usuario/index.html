@@ -25,7 +25,7 @@ xmlns:th="http://www.thymeleaf.org"
         </script>
     </div>
     <h1>Listado de Usuario</h1>
-    <a th:href="@{/usuarios/create}" class="btn btn-outline-primary">Nuevo usuario</a>
+    <a th:href="@{/usuarios/create}" class="btn btn-primary">Nuevo usuario</a>
     <table class="table table-striped">
         <thead >
             <tr>
@@ -48,7 +48,7 @@ xmlns:th="http://www.thymeleaf.org"
         </tbody>
     </table>
     <nav aria-label="Page navigation example">
-        <ul class="pagination">
+        <ul class="pagination justify-content-center">
             <li class="page-item" th:each="pageNum : ${pageNumbers}">
                 <a class="page-link" th:href="@{|/usuarios?page=${pageNum}|}" th:text="${pageNum}"></a>
             </li>
