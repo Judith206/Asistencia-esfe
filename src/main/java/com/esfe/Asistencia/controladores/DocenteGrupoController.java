@@ -16,12 +16,18 @@ import org.springframework.web.servlet.mvc.support.*;
 
 import com.esfe.Asistencia.Modelos.*;
 import com.esfe.Asistencia.Servicios.Interfaces.*;
+import com.esfe.Asistencia.Utilidades.PdfGeneratorService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/asignaciones")
 public class DocenteGrupoController {
     @Autowired
     private IDocenteGrupoService docenteGrupoService;
+
+    @Autowired
+    private PdfGeneratorService pdfGeneratorService;
 
     @Autowired
     private IGrupoService grupoService;
@@ -129,5 +135,28 @@ public class DocenteGrupoController {
         redirect.addFlashAttribute("message", "Asignación eliminada correctamente.");
         return "redirect:/asignaciones";
     }
+    
+    @GetMapping("/docentegrupoPDF")
+    public void generarPdf(Model model, HttpServletResponse response) throws Exception {
+        // 1. Obtener datos a mostrar en el pdf
+        List<DocenteGrupo> docenteGrupo = docenteGrupoService.obtenerTodos();
+
+        // 2. Preparar datos para Thymeleaf
+        Map<String, Object> data = new HashMap<>();
+        data.put("asignaciones", docenteGrupo);
+
+        //3. Generar PDF (con el nombre de la plantilla Thymeleaf que quieres usar)
+        byte[] pdfBytes = pdfGeneratorService.generatePdfReport("asignacion/RPDocenteGrupo", data);
+
+        // 4. Configurar la respuesta HTTP para descargar o mostrar el PDF
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=docentes.pdf");
+        response.setContentLength(pdfBytes.length);
+
+        //5. Escribir el PDF en la respuesta
+        response.getOutputStream().write(pdfBytes);
+        response.getOutputStream().flush();
+    }
+    
 
 }
