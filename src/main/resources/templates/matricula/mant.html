@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html 
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/_mainLayout}">
+<head>
+    <title th:text="'Mantenimiento de Matrícula - '+ ${action}">Mantenimiento</title>
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+</head>
+<body>
+    <div layout:fragment="content" class="container mt-4">
+        <h2 th:text="'Matrícula - '+ ${action}">Matrícula</h2>
+
+        <form th:action="@{'/matriculas/' + ${action}}" th:object="${estudianteGrupo}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group mb-3">
+                <label for="estudiante">Estudiante:</label>
+                <select id="estudiante" th:field="*{estudiante.id}" class="form-control" 
+                        th:disabled="${action == 'view' or action == 'delete'}">
+                    <option value="">Seleccione un estudiante</option>
+                    <option th:each="estudiante : ${estudiantes}" 
+                            th:value="${estudiante.id}" 
+                            th:text="${estudiante.nombre + ' ' + estudiante.apellido + ' (' + estudiante.carnet + ')'}"
+                            th:selected="${estudiante.id == estudianteGrupo.estudiante.id}">
+                    </option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('estudiante')}" th:errors="*{estudiante}"></div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="grupo">Grupo:</label>
+                <select id="grupo" th:field="*{grupo.id}" class="form-control" 
+                        th:disabled="${action == 'view' or action == 'delete'}">
+                    <option value="">Seleccione un grupo</option>
+                    <option th:each="grupo : ${grupos}" 
+                            th:value="${grupo.id}" 
+                            th:text="${grupo.nombre + ' - ' + grupo.descripcion}"
+                            th:selected="${grupo.id == estudianteGrupo.grupo.id}">
+                    </option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="anio">Año:</label>
+                <input type="number" id="anio" th:field="*{anio}" class="form-control" 
+                       th:readonly="${action == 'view' or action == 'delete'}" />
+                <div class="text-danger" th:if="${#fields.hasErrors('anio')}" th:errors="*{anio}"></div>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="ciclo">Ciclo:</label>
+                <select id="ciclo" th:field="*{ciclo}" class="form-control" 
+                        th:disabled="${action == 'view' or action == 'delete'}">
+                    <option value="">Seleccione un ciclo</option>
+                    <option value="Primer Ciclo">Primer Ciclo</option>
+                    <option value="Segundo Ciclo">Segundo Ciclo</option>
+                    <option value="Tercer Ciclo">Tercer Ciclo</option>
+                    <option value="Cuarto Ciclo">Cuarto Ciclo</option>
+                    <option value="Quinto Ciclo">Quinto Ciclo</option>
+                    <option value="Sexto Ciclo">Sexto Ciclo</option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('ciclo')}" th:errors="*{ciclo}"></div>
+            </div>
+
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" 
+                        th:text="${action == 'edit' ? 'Actualizar' : (action == 'delete' ? 'Eliminar' : 'Guardar')}">
+                </button>
+                <a th:href="@{/matriculas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

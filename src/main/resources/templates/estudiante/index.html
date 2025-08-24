@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html 
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="/layouts/_mainLayout.html">
+<head>
+    <title layout:fragment="title">Listado de Estudiantes</title>
+</head>
+<body>
+    <section layout:fragment="content">
+        <div th:if="${msg != null }">
+            <script>
+                swal({
+                    title: "Confirmacion",
+                    text: "[[ ${msg} ]]",
+                    icon: "success"
+                })
+            </script>
+        </div>
+        <div th:if="${error != null }">
+            <script>
+                swal({
+                    title: "Error",
+                    text: "[[ ${error} ]]",
+                    icon: "error"
+                })
+            </script>
+        </div>
+        
+        <h2>Listado de Estudiantes</h2>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a th:href="@{/estudiantes/create}" class="btn btn-success">Nuevo Estudiante</a>
+
+            <a th:href="@{/estudiantes/estudiantePDF}" class="btn btn-primary btn-icon-split float-right">
+                <span class="icon text-white-50">
+                    <i class="fas fa-file-pdf"></i>
+                </span>
+                <span class="text">Generar Reporte</span>
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Carnet</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>                
+            <tbody>
+                <tr th:each="estudiante : ${estudiantes.content}">
+                    <td th:text="${estudiante.nombre}">Nombre</td>
+                    <td th:text="${estudiante.apellido}">Apellido</td>
+                    <td th:text="${estudiante.email}">Email</td>
+                    <td th:text="${estudiante.telefono}">Teléfono</td>
+                    <td th:text="${estudiante.carnet}">Carnet</td>
+                    <td>
+                        <a th:href="@{/estudiantes/view/{id}(id=${estudiante.id})}" class="btn btn-info btn-sm">Ver</a>
+                        <a th:href="@{/estudiantes/edit/{id}(id=${estudiante.id})}" class="btn btn-warning btn-sm">Editar</a>
+                        <a th:href="@{/estudiantes/delete/{id}(id=${estudiante.id})}" class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                <tr th:if="${estudiantes.totalElements == 0}">
+                    <td colspan="6" class="text-center">No hay estudiantes registrados.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <nav th:if="${pageNumbers}">
+            <ul class="pagination justify-content-center">
+                <li th:each="pageNum : ${pageNumbers}" class="page-item"
+                    th:classappend="${pageNum == estudiantes.number + 1 } ? 'active'">
+                    <a class="page-link" th:href="@{/estudiantes(page=${pageNum}, size=${estudiantes.size})}" th:text="${pageNum}"></a>
+                </li>
+            </ul>
+        </nav>
+    </section>
+</body>
+</html>

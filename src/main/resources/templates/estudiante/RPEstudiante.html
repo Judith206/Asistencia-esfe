@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+    <style>
+        body {font-family: Arial, sans-serif;}
+        table {width: 100%; border-collapse: collapse;}
+        th, td {border: 1px solid black; padding: 6px;}
+        th {background-color: #f2f2f2;}
+    </style>
+</head>
+<body>
+    <h1>Lista de Estudiantes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Carnet</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="estudiante : ${estudiantes}">
+                <td th:text="${estudiante.nombre}"></td>
+                <td th:text="${estudiante.apellido}"></td>
+                <td th:text="${estudiante.email}"></td>
+                <td th:text="${estudiante.carnet}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
